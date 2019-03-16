@@ -37,7 +37,7 @@ export class FileManager {
           reject(`Error moving file to public path: ${errMoving}`);
         }
 
-        resolve(completePath);
+        resolve(`/api/v1/static/${newName}`);
       });
     });
   }

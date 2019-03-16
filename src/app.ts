@@ -37,7 +37,7 @@ class App {
         abortOnLimit: true,
         preserveExtension: true,
         useTempFiles : true,
-        tempFileDir : './tmp/' },
+        tempFileDir : path.join('..', '..', '..', '..', 'dist', 'tmp') },
       )); // Manages the file uploads and adds a limit.
     this.app.use('/api/v1/static', express.static(STATIC)); // Exposes a static folder to the exterior.
     this.app.use(statusMonitor(statusMonitorConfiguration));

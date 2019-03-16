@@ -4,7 +4,7 @@ import { Request } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { FileManager } from '../utils/fileManager';
 import * as moment from 'moment';
-import * as uuid from 'uuid/v3';
+import * as uuid from 'uuid';
 import * as diskspace from 'diskspace';
 import * as fs from 'fs';
 
@@ -33,7 +33,6 @@ class FileController {
 
   // Create a new file.
   public async postFile(req: Request) {
-    console.log(`Files detected: ${req.files}`);
     let customerr: string;
 
     if (req.files && req.files.music) {
@@ -48,9 +47,8 @@ class FileController {
           Rp.data.path = fullPath;
           Rp.data.uuid = id;
           Rp.data.extension = FileManager.getExtension(expressFile);
-          Rp.data.size = FileManager.getSize(expressFile);
           Rp.data.timestamp = moment();
-          diskspace.check('/', (err, result) => {
+          await diskspace.check('/', (err, result) => {
             if (err) {
               Rp.data.serverstatus = 'error retrieving server info.';
             }
