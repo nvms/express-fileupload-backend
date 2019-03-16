@@ -37,7 +37,7 @@ export class FileRouter {
   public init() {
     this.router.get('/', this.getFiles);
     this.router.post('/', this.postFile);
-    this.router.delete('/:id', this.delFile);
+    this.router.delete('/:music', this.delFile);
   }
 }
 

@@ -33,6 +33,9 @@ class FileController {
 
   // Create a new file.
   public async postFile(req: Request) {
+    console.log(`Files detected: ${req.files}`);
+    let customerr: string;
+
     if (req.files && req.files.music) {
 
       const expressFile = (req.files.music as UploadedFile);
@@ -59,9 +62,13 @@ class FileController {
           Rp.errors.push(err);
         });
       } else {
-        Rp.errors.push('File is not an audio file.');
+        customerr = 'File is not an audio file.';
+        console.log(customerr);
+        Rp.errors.push(customerr);
       }
     } else {
+      customerr = 'No file attached or field name [music] is empty.';
+      console.log(customerr);
       Rp.errors.push('No file attached or field name [music] is empty.');
     }
     return Rp.export();
@@ -69,14 +76,16 @@ class FileController {
 
   // Delete File
   public async delFile(req: Request) {
+    console.log(req.params);
+
     return new Promise((resolve, reject) => {
-      fs.unlink(`${STATIC}/${req.params.id}`, (err) => {
+      fs.unlink(`${STATIC}/${req.params.music}`, (err) => {
         if (err) {
           console.log(err);
-          Rp.errors.push(`Error deleting file ${req.params.id}, reason: ${err}`);
+          Rp.errors.push(`Error deleting file ${req.params.music}, reason: ${err}`);
           reject(Rp);
         } else {
-          Rp.data.status = `Sucess: File ${req.params.id} deleted!`;
+          Rp.data.status = `Sucess: File ${req.params.music} deleted!`;
           resolve(Rp.export());
         }
       });
