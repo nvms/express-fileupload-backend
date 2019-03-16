@@ -16,4 +16,4 @@ COPY ./dist /usr/src/app/dist
 
 EXPOSE 3005
 
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "prod" ]
