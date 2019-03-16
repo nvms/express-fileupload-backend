@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+
+  server:
+    build: ./
+    volumes: 
+      - ./:/usr/src/app
+
+    ports:
+      - 8001:3005
+    env_file:
+      - env
+    depends_on:
+      - database
+    restart: on-failure
