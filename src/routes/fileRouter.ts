@@ -38,7 +38,6 @@ export class FileRouter {
     this.router.get('/', this.getFiles);
     this.router.post('/', this.postFile);
     this.router.delete('/:id', this.delFile);
-
   }
 }
 

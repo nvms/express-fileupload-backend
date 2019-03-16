@@ -1,11 +1,8 @@
 import * as debug from 'debug';
-import * as dotenv from 'dotenv';
 import * as http from 'http';
-
-dotenv.config({ path: '.env' });
 import app from './app';
 
-const port = normalizePort(process.env.PORT);
+const port = normalizePort(3005);
 app.set('port', port);
 
 const server = http.createServer(app);

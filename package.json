@@ -6,13 +6,12 @@
     "name": "Frenzoid",
     "email": "frenzoid@protonmail.com"
   },
-  "main": "dist/main.js",
+  "main": "dist/server.js",
   "scripts": {
     "tslint": "tslint --project tsconfig.json  src/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"tsc -w\" \"nodemon dist/server.js\"",
-    "prod": "node dist/server.js",
-    "pm2start": "pm2 start dist/server.js"
+    "prod": "node dist/server.js"
   },
   "license": "ISC",
   "dependencies": {
@@ -31,10 +30,11 @@
     "express-favicon": "^2.0.1",
     "express-fileupload": "^1.1.1-alpha.1",
     "express-status-monitor": "^1.2.3",
-    "moment": "^2.22.1",
+    "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.9",
     "path": "^0.12.7",
+    "request": "^2.88.0",
     "tslint": "^5.12.1",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.2.2",
