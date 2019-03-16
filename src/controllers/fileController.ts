@@ -3,7 +3,7 @@ import { STATIC } from '../config/const';
 import { Request } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { FileManager } from '../utils/fileManager';
-import { moment } from 'moment';
+import * as moment from 'moment';
 import * as uuid from 'uuid/v3';
 import * as diskspace from 'diskspace';
 import * as fs from 'fs';
@@ -63,7 +63,7 @@ class FileController {
     fs.unlink(`${STATIC}/${req.params.id}`, (err) => {
       if (err) {
         console.log(err);
-        Rp.errors.push(`Error deleting file ${req.params.id}, reason: ${err}`)
+        Rp.errors.push(`Error deleting file ${req.params.id}, reason: ${err}`);
       } else {
         Rp.data.status = 'Sucess: File deleted';
       }
