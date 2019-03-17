@@ -32,16 +32,16 @@ class FileController {
         return new Promise((resolve, reject) => {
             let customerr;
             if (!req.files || !req.files.music || !req.files.music.name) {
-                customerr = 'File is not an audio file.';
+                customerr = 'No file attached or field name [music] is empty.';
                 console.log(customerr);
-                response_1.Response.errors.push(customerr);
+                response_1.Response.errors.push('No file attached or field name [music] is empty.');
                 return reject(response_1.Response);
             }
             const expressFile = req.files.music;
             if (!expressFile || !fileManager_1.FileManager.checkMimetype(expressFile, 'audio/')) {
-                customerr = 'No file attached or field name [music] is empty.';
+                customerr = 'File is not an audio file.';
                 console.log(customerr);
-                response_1.Response.errors.push('No file attached or field name [music] is empty.');
+                response_1.Response.errors.push(customerr);
                 return reject(response_1.Response);
             }
             const id = uuid();

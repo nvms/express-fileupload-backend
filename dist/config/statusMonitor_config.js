@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.statusMonitorConfiguration = {
-    title: process.env.APPNAME,
+    title: 'Backend Status Monitor :D',
     path: '/status',
     spans: [{
             interval: 1,
