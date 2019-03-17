@@ -25,7 +25,7 @@ class FileManager {
     }
     static manageFile(expressFile, movePath, newName = uuid() + FileManager.getExtension(expressFile)) {
         // tslint:disable-next-line:no-shadowed-variable
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             const completePath = path.join(movePath, newName);
             // Move file.
             expressFile.mv(completePath, (errMoving) => {

@@ -14,7 +14,7 @@ class StatusController {
         if (err) {
           console.log(err);
           Rp.errors.push('error retrieving server info.');
-          reject(new Error(err));
+          return reject(new Error(err));
         }
 
         const { total, used, free, status } = result;
@@ -25,7 +25,7 @@ class StatusController {
         Rp.data.diskstatus.free = FileManager.getSize(+free);
         Rp.data.diskstatus.filelimit = FileManager.getSize(+FILELIMIT);
         Rp.data.diskstatus.status = status;
-        resolve(Rp.export());
+        return resolve(Rp.export());
       });
     });
   }
