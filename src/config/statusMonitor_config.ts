@@ -1,5 +1,5 @@
 export const statusMonitorConfiguration = {
-  title: process.env.APPNAME,  // Default title
+  title: 'Music repository backend status :D',  // Default title
   path: '/status',
   spans: [{
     interval: 1,            // Every second
