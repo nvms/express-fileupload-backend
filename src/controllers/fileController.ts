@@ -67,7 +67,6 @@ class FileController {
           Rp.data.newname = newname;
           Rp.data.idname = id;
           Rp.data.extension = FileManager.getExtension(expressFile);
-          Rp.data.size = FileManager.getSize(expressFile);
           Rp.data.timestamp = moment();
           resolve(Rp.export());
 
@@ -84,6 +83,7 @@ class FileController {
         .catch((err) => {
           console.log(err);
           Rp.errors.push(err);
+          reject(Rp);
         });
     });
   }

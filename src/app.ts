@@ -10,7 +10,7 @@ import * as statusMonitor from 'express-status-monitor';
 // Import config, the response template, and the utils (in this case the jwt manager).
 import { Response as Rp } from './config/response';
 import { statusMonitorConfiguration } from './config/statusMonitor_config';
-import { STATIC, TMP, EXTERNALSTATIC } from './config/const';
+import { STATIC, TMP, EXTERNALSTATIC, FILELIMIT } from './config/const';
 
 // Imports the routers.
 import fileRouter from './routes/fileRouter';
@@ -33,6 +33,7 @@ class App {
     this.app.use(express_fileupload(
       {
         debug: true,
+        limits: { fileSize: FILELIMIT },
         abortOnLimit: true,
         preserveExtension: true,
         useTempFiles: true,

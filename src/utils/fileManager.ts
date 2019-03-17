@@ -11,8 +11,8 @@ export class FileManager {
     return `.${expressFile.name.split('.')[lengthOfDots - 1]}`;
   }
 
-  public static getSize(expressFile: UploadedFile){
-    const bytes = expressFile.data.byteLength;
+  public static getSize(bytelength: number){
+    const bytes = bytelength;
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes === 0) return 'n/a';
     const div = Math.log(bytes) / Math.log(1024);
