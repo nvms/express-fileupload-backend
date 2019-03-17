@@ -5,7 +5,8 @@ import * as path from 'path';
 export class FileManager {
 
   public static getExtension(expressFile: UploadedFile){
-    return `.${expressFile.name.split('.')[1]}`;
+    const lengthOfDots = expressFile.name.split('.').length; // get last dot.
+    return `.${expressFile.name.split('.')[lengthOfDots - 1]}`;
   }
 
   public static getSize(expressFile: UploadedFile){

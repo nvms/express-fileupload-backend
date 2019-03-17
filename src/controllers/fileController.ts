@@ -7,9 +7,10 @@ import * as moment from 'moment';
 import * as uuid from 'uuid';
 import * as diskspace from 'diskspace';
 import * as fs from 'fs';
+import * as path from 'path';
+import * as os from 'os';
 
 class FileController {
-
   // Get all Files
   public async getFiles() {
     return new Promise((resolve, reject) => {
@@ -33,43 +34,54 @@ class FileController {
 
   // Create a new file.
   public async postFile(req: Request) {
-    let customerr: string;
+    return new Promise((resolve, reject) => {
+      let customerr: string;
 
-    if (req.files && req.files.music) {
+      if (!req.files || !req.files.music || !(req.files.music as UploadedFile).name) {
+        customerr = 'File is not an audio file.';
+        console.log(customerr);
+        Rp.errors.push(customerr);
+        return reject(Rp);
+      }
 
-      const expressFile = (req.files.music as UploadedFile);
+      const expressFile = req.files.music as UploadedFile;
 
-      if (expressFile && FileManager.checkMimetype(expressFile, 'audio/')) {
+      if (!expressFile || !FileManager.checkMimetype(expressFile, 'audio/')) {
+        customerr = 'No file attached or field name [music] is empty.';
+        console.log(customerr);
+        Rp.errors.push('No file attached or field name [music] is empty.');
+        return reject(Rp);
+      }
 
-        const id: string = uuid();
+      const id: string = uuid();
 
-        await FileManager.manageFile(expressFile, STATIC, id + FileManager.getExtension(expressFile)).then(async (fullPath) => {
-          Rp.data.path = fullPath;
-          Rp.data.uuid = id;
+      FileManager.manageFile(
+        expressFile,
+        STATIC,
+        id + FileManager.getExtension(expressFile),
+      )
+        .then(async (serverpath) => {
+          Rp.data.path = serverpath;
+          Rp.data.newname = id;
           Rp.data.extension = FileManager.getExtension(expressFile);
           Rp.data.timestamp = moment();
-          await diskspace.check('/', (err, result) => {
+          resolve(Rp.export());
+
+         /*  diskspace.check((os.platform() === 'win32') ? process.cwd().split(path.sep)[0] : '/', (err, result) => {
             if (err) {
               Rp.data.serverstatus = 'error retrieving server info.';
+              resolve(Rp.export());
             }
             Rp.data.serverstatus = result;
-          });
+            resolve(Rp.export());
+          }); */
+
         })
         .catch((err) => {
           console.log(err);
           Rp.errors.push(err);
         });
-      } else {
-        customerr = 'File is not an audio file.';
-        console.log(customerr);
-        Rp.errors.push(customerr);
-      }
-    } else {
-      customerr = 'No file attached or field name [music] is empty.';
-      console.log(customerr);
-      Rp.errors.push('No file attached or field name [music] is empty.');
-    }
-    return Rp.export();
+    });
   }
 
   // Delete File
@@ -80,7 +92,9 @@ class FileController {
       fs.unlink(`${STATIC}/${req.params.music}`, (err) => {
         if (err) {
           console.log(err);
-          Rp.errors.push(`Error deleting file ${req.params.music}, reason: ${err}`);
+          Rp.errors.push(
+            `Error deleting file ${req.params.music}, reason: ${err}`,
+          );
           reject(Rp);
         } else {
           Rp.data.status = `Sucess: File ${req.params.music} deleted!`;

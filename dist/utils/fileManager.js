@@ -4,7 +4,8 @@ const uuid = require("uuid/v3");
 const path = require("path");
 class FileManager {
     static getExtension(expressFile) {
-        return `.${expressFile.name.split('.')[1]}`;
+        const lengthOfDots = expressFile.name.split('.').length; // get last dot.
+        return `.${expressFile.name.split('.')[lengthOfDots - 1]}`;
     }
     static getSize(expressFile) {
         const bytes = expressFile.data.byteLength;

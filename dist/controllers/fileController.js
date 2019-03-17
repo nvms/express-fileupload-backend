@@ -5,7 +5,6 @@ const const_1 = require("../config/const");
 const fileManager_1 = require("../utils/fileManager");
 const moment = require("moment");
 const uuid = require("uuid");
-const diskspace = require("diskspace");
 const fs = require("fs");
 class FileController {
     // Get all Files
@@ -30,40 +29,43 @@ class FileController {
     }
     // Create a new file.
     async postFile(req) {
-        let customerr;
-        if (req.files && req.files.music) {
-            const expressFile = req.files.music;
-            if (expressFile && fileManager_1.FileManager.checkMimetype(expressFile, 'audio/')) {
-                const id = uuid();
-                await fileManager_1.FileManager.manageFile(expressFile, const_1.STATIC, id + fileManager_1.FileManager.getExtension(expressFile)).then(async (fullPath) => {
-                    response_1.Response.data.path = fullPath;
-                    response_1.Response.data.uuid = id;
-                    response_1.Response.data.extension = fileManager_1.FileManager.getExtension(expressFile);
-                    response_1.Response.data.timestamp = moment();
-                    await diskspace.check('/', (err, result) => {
-                        if (err) {
-                            response_1.Response.data.serverstatus = 'error retrieving server info.';
-                        }
-                        response_1.Response.data.serverstatus = result;
-                    });
-                })
-                    .catch((err) => {
-                    console.log(err);
-                    response_1.Response.errors.push(err);
-                });
-            }
-            else {
+        return new Promise((resolve, reject) => {
+            let customerr;
+            if (!req.files || !req.files.music || !req.files.music.name) {
                 customerr = 'File is not an audio file.';
                 console.log(customerr);
                 response_1.Response.errors.push(customerr);
+                return reject(response_1.Response);
             }
-        }
-        else {
-            customerr = 'No file attached or field name [music] is empty.';
-            console.log(customerr);
-            response_1.Response.errors.push('No file attached or field name [music] is empty.');
-        }
-        return response_1.Response.export();
+            const expressFile = req.files.music;
+            if (!expressFile || !fileManager_1.FileManager.checkMimetype(expressFile, 'audio/')) {
+                customerr = 'No file attached or field name [music] is empty.';
+                console.log(customerr);
+                response_1.Response.errors.push('No file attached or field name [music] is empty.');
+                return reject(response_1.Response);
+            }
+            const id = uuid();
+            fileManager_1.FileManager.manageFile(expressFile, const_1.STATIC, id + fileManager_1.FileManager.getExtension(expressFile))
+                .then(async (serverpath) => {
+                response_1.Response.data.path = serverpath;
+                response_1.Response.data.newname = id;
+                response_1.Response.data.extension = fileManager_1.FileManager.getExtension(expressFile);
+                response_1.Response.data.timestamp = moment();
+                resolve(response_1.Response.export());
+                /*  diskspace.check((os.platform() === 'win32') ? process.cwd().split(path.sep)[0] : '/', (err, result) => {
+                   if (err) {
+                     Rp.data.serverstatus = 'error retrieving server info.';
+                     resolve(Rp.export());
+                   }
+                   Rp.data.serverstatus = result;
+                   resolve(Rp.export());
+                 }); */
+            })
+                .catch((err) => {
+                console.log(err);
+                response_1.Response.errors.push(err);
+            });
+        });
     }
     // Delete File
     async delFile(req) {
