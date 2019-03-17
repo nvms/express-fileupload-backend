@@ -1,7 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// Import libraries.
-const bodyParser = require("body-parser");
 const compression = require("compression");
 const cors = require("cors");
 const express = require("express");
@@ -25,15 +23,13 @@ class App {
         this.app.use(cors()); // Allows Control Acess Protol to work outside of a localhost.
         this.app.use(compression()); // Compresses the requests.
         this.app.use(logger('dev')); // Logs the activity to the console. (It can be configured to write it to a file).
-        this.app.use(bodyParser.json({ limit: '100mb' })); // Parses automaticallythe requests, and adds a limit.
-        this.app.use(bodyParser.urlencoded({ extended: false, limit: '100mb' })); // Manages the encoded urls, and adds a limit.
         this.app.use(express_fileupload({
-            debug: true,
+            debug: false,
             limits: { fileSize: const_1.FILELIMIT },
-            abortOnLimit: true,
+            abortOnLimit: false,
             preserveExtension: true,
             useTempFiles: true,
-            tempFileDir: const_1.TMP
+            tempFileDir: 'tmp'
         })); // Manages the file uploads and adds a limit.
         this.app.use(const_1.EXTERNALSTATIC, express.static(const_1.STATIC)); // Exposes a static folder to the exterior.
         this.app.use(statusMonitor(statusMonitor_config_1.statusMonitorConfiguration));

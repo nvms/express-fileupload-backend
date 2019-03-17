@@ -50,6 +50,9 @@ class FileController {
       }
 
       const expressFile = req.files.music as UploadedFile;
+      if (expressFile.truncated) {
+        return reject(new Error('File is too heavy.'));
+      }
 
       if (!expressFile || !FileManager.checkMimetype(expressFile, 'audio/')) {
         return reject(new Error('File is not an audio file.'));
@@ -68,6 +71,7 @@ class FileController {
         Rp.data.newname = newname;
         Rp.data.idname = id;
         Rp.data.extension = FileManager.getExtension(expressFile);
+        Rp.data.mimetype = expressFile.mimetype;
         Rp.data.timestamp = moment();
         return resolve(Rp.export());
       })

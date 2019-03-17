@@ -42,9 +42,9 @@ class FileManager {
                             }
                         }
                     });
-                    reject(new Error(`Error moving file to public path: ${errMoving}`));
+                    return reject(new Error(`Error moving file to public path: ${errMoving}`));
                 }
-                resolve(const_1.EXTERNALSTATIC + newName);
+                return resolve(const_1.EXTERNALSTATIC + newName);
             });
         });
     }

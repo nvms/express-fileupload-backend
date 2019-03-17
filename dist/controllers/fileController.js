@@ -43,6 +43,9 @@ class FileController {
                 return reject(new Error('No file attached or field name [music] is empty.'));
             }
             const expressFile = req.files.music;
+            if (expressFile.truncated) {
+                return reject(new Error('File is too heavy.'));
+            }
             if (!expressFile || !fileManager_1.FileManager.checkMimetype(expressFile, 'audio/')) {
                 return reject(new Error('File is not an audio file.'));
             }
@@ -54,6 +57,7 @@ class FileController {
                 response_1.Response.data.newname = newname;
                 response_1.Response.data.idname = id;
                 response_1.Response.data.extension = fileManager_1.FileManager.getExtension(expressFile);
+                response_1.Response.data.mimetype = expressFile.mimetype;
                 response_1.Response.data.timestamp = moment();
                 return resolve(response_1.Response.export());
             })
