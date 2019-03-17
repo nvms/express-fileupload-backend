@@ -10,3 +10,4 @@ This is a project which serves as a test and a template for future projects.
 
 - ENV BYTERESTRICTOR: Env variable which specifies weigth (IN BYTES) limit for each file to upload.
 
+Docker image: https://cloud.docker.com/repository/docker/xenium/express-file-backend/general
