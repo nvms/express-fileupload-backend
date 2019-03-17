@@ -38,18 +38,18 @@ class FileController {
       let customerr: string;
 
       if (!req.files || !req.files.music || !(req.files.music as UploadedFile).name) {
-        customerr = 'File is not an audio file.';
+        customerr = 'No file attached or field name [music] is empty.';
         console.log(customerr);
-        Rp.errors.push(customerr);
+        Rp.errors.push('No file attached or field name [music] is empty.');
         return reject(Rp);
       }
 
       const expressFile = req.files.music as UploadedFile;
 
       if (!expressFile || !FileManager.checkMimetype(expressFile, 'audio/')) {
-        customerr = 'No file attached or field name [music] is empty.';
+        customerr = 'File is not an audio file.';
         console.log(customerr);
-        Rp.errors.push('No file attached or field name [music] is empty.');
+        Rp.errors.push(customerr);
         return reject(Rp);
       }
 
