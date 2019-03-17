@@ -32,7 +32,7 @@ class FileController {
 
   // Create a new file.
   public async postFile(req: Request) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
       let customerr: string;
       const OSRoot = (os.platform() === 'win32') ? process.cwd().split(path.sep)[0] : '/';
@@ -62,7 +62,7 @@ class FileController {
       const id: string = uuid();
       const newname = id + FileManager.getExtension(expressFile);
 
-      FileManager.manageFile(
+      await FileManager.manageFile(
         expressFile,
         STATIC,
         newname,
