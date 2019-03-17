@@ -34,7 +34,7 @@ export class FileManager {
     return new Promise((resolve, reject) => {
       const completePath: string = path.join(movePath, newName);
 
-        // Move file.
+      // Move file.
       expressFile.mv(completePath, (errMoving: string) => {
         if (errMoving) {
           fs.readdir(TMP, (errReadingDir, files) => {
@@ -48,7 +48,7 @@ export class FileManager {
               }
             }
           });
-          reject(`Error moving file to public path: ${errMoving}`);
+          reject(new Error(`Error moving file to public path: ${errMoving}`));
         }
 
         resolve(EXTERNALSTATIC + newName);

@@ -10,10 +10,11 @@ import * as statusMonitor from 'express-status-monitor';
 // Import config, the response template, and the utils (in this case the jwt manager).
 import { Response as Rp } from './config/response';
 import { statusMonitorConfiguration } from './config/statusMonitor_config';
-import { STATIC, TMP, EXTERNALSTATIC, FILELIMIT } from './config/const';
+import { STATIC, TMP, EXTERNALSTATIC, FILELIMIT, APIV1 } from './config/const';
 
 // Imports the routers.
 import fileRouter from './routes/fileRouter';
+import statusRouter from './routes/statusRouter';
 
 class App {
   public app: express.Application;
@@ -48,7 +49,8 @@ class App {
     });
 
     // Routers
-    this.app.use('/api/v1/music', fileRouter);
+    this.app.use(`${APIV1}music`, fileRouter);
+    this.app.use(`${APIV1}status`, statusRouter);
   }
 }
 

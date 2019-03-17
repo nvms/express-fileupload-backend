@@ -9,8 +9,8 @@ class FileManager {
         const lengthOfDots = expressFile.name.split('.').length; // get last dot.
         return `.${expressFile.name.split('.')[lengthOfDots - 1]}`;
     }
-    static getSize(expressFile) {
-        const bytes = expressFile.data.byteLength;
+    static getSize(bytelength) {
+        const bytes = bytelength;
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         if (bytes === 0)
             return 'n/a';
@@ -42,7 +42,7 @@ class FileManager {
                             }
                         }
                     });
-                    reject(`Error moving file to public path: ${errMoving}`);
+                    reject(new Error(`Error moving file to public path: ${errMoving}`));
                 }
                 resolve(const_1.EXTERNALSTATIC + newName);
             });

@@ -11,21 +11,21 @@ class FileRouter {
     async getFiles(req, res, next) {
         res.json(await fileController_1.fileController.getFiles().catch((err) => {
             console.log(err);
-            response_1.Response.errors.push(err);
+            response_1.Response.errors.push(err.message);
             return response_1.Response.export();
         }));
     }
     async postFile(req, res, next) {
         res.json(await fileController_1.fileController.postFile(req).catch((err) => {
             console.log(err);
-            response_1.Response.errors.push(err);
+            response_1.Response.errors.push(err.message);
             return response_1.Response.export();
         }));
     }
     async delFile(req, res, next) {
         res.json(await fileController_1.fileController.delFile(req).catch((err) => {
             console.log(err);
-            response_1.Response.errors.push(err);
+            response_1.Response.errors.push(err.message);
             return response_1.Response.export();
         }));
     }

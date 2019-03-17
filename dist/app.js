@@ -14,6 +14,7 @@ const statusMonitor_config_1 = require("./config/statusMonitor_config");
 const const_1 = require("./config/const");
 // Imports the routers.
 const fileRouter_1 = require("./routes/fileRouter");
+const statusRouter_1 = require("./routes/statusRouter");
 class App {
     constructor() {
         this.app = express();
@@ -28,6 +29,7 @@ class App {
         this.app.use(bodyParser.urlencoded({ extended: false, limit: '100mb' })); // Manages the encoded urls, and adds a limit.
         this.app.use(express_fileupload({
             debug: true,
+            limits: { fileSize: const_1.FILELIMIT },
             abortOnLimit: true,
             preserveExtension: true,
             useTempFiles: true,
@@ -40,7 +42,8 @@ class App {
             next();
         });
         // Routers
-        this.app.use('/api/v1/music', fileRouter_1.default);
+        this.app.use(`${const_1.APIV1}music`, fileRouter_1.default);
+        this.app.use(`${const_1.APIV1}status`, statusRouter_1.default);
     }
 }
 exports.default = new App().app;
