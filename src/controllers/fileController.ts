@@ -37,26 +37,26 @@ class FileController {
       let customerr: string;
       const OSRoot = (os.platform() === 'win32') ? process.cwd().split(path.sep)[0] : '/';
 
-      diskspace.check(OSRoot, (err, result) => {
+      await diskspace.check(OSRoot, (err, result) => {
         if (!err) {
           const { total, used, free, status } = result;
           if (free < FILELIMIT) {
             customerr = `Disk full at critical levels, space left: ${FileManager.getSize(free)},
             denying any file upload until free space (${free}) > file limit(${FILELIMIT})`;
-            reject(new Error(customerr));
+            return reject(new Error(customerr));
           }
         }
       });
 
       if (!req.files || !req.files.music || !(req.files.music as UploadedFile).name) {
         customerr = 'No file attached or field name [music] is empty.';
-        reject(new Error(customerr));
+        return reject(new Error(customerr));
       }
 
       const expressFile = req.files.music as UploadedFile;
       if (!expressFile || !FileManager.checkMimetype(expressFile, 'audio/')) {
         customerr = 'File is not an audio file.';
-        reject(new Error(customerr));
+        return reject(new Error(customerr));
       }
 
       const id: string = uuid();
@@ -76,7 +76,7 @@ class FileController {
         resolve(Rp.export());
       })
       .catch((err) => {
-        reject(new Error(err.message));
+        return reject(new Error(err.message));
       });
     });
   }
