@@ -1,6 +1,8 @@
 import { UploadedFile } from 'express-fileupload';
+import { TMP, EXTERNALSTATIC } from '../config/const';
 import * as uuid from 'uuid/v3';
 import * as path from 'path';
+import * as  fs from 'fs';
 
 export class FileManager {
 
@@ -35,10 +37,21 @@ export class FileManager {
         // Move file.
       expressFile.mv(completePath, (errMoving: string) => {
         if (errMoving) {
+          fs.readdir(TMP, (errReadingDir, files) => {
+            if (!errReadingDir){
+              console.log(`Error reading temporal folder: ${errReadingDir.message}`);
+            } else {
+              for (const file of files){
+                fs.unlink(TMP + file, (errDeleting) => {
+                  console.log(`Error deleting temporal file: ${errDeleting.message}`);
+                });
+              }
+            }
+          });
           reject(`Error moving file to public path: ${errMoving}`);
         }
 
-        resolve(`/api/v1/static/${newName}`);
+        resolve(EXTERNALSTATIC + newName);
       });
     });
   }

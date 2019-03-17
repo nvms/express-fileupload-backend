@@ -1,5 +1,5 @@
 import { Response as Rp } from '../config/response';
-import { STATIC } from '../config/const';
+import { STATIC, EXTERNALSTATIC } from '../config/const';
 import { Request } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { FileManager } from '../utils/fileManager';
@@ -18,10 +18,11 @@ class FileController {
         if (!err) {
           Rp.data = [];
 
-          files.forEach((file) => {
-            console.log(`/api/v1/static/${file}`);
-            Rp.data.push(`/api/v1/static/${file}`);
-          });
+          for (const file of files) {
+            console.log(EXTERNALSTATIC + file);
+            Rp.data.push(EXTERNALSTATIC + file);
+          }
+
           resolve(Rp.export());
         } else {
           console.log(err.message);
@@ -54,16 +55,19 @@ class FileController {
       }
 
       const id: string = uuid();
+      const newname = id + FileManager.getExtension(expressFile);
 
       FileManager.manageFile(
         expressFile,
         STATIC,
-        id + FileManager.getExtension(expressFile),
+        newname,
       )
         .then(async (serverpath) => {
           Rp.data.path = serverpath;
-          Rp.data.newname = id;
+          Rp.data.newname = newname;
+          Rp.data.idname = id;
           Rp.data.extension = FileManager.getExtension(expressFile);
+          Rp.data.size = FileManager.getSize(expressFile);
           Rp.data.timestamp = moment();
           resolve(Rp.export());
 
@@ -89,7 +93,7 @@ class FileController {
     console.log(req.params);
 
     return new Promise((resolve, reject) => {
-      fs.unlink(`${STATIC}/${req.params.music}`, (err) => {
+      fs.unlink(STATIC + req.params.music, (err) => {
         if (err) {
           console.log(err);
           Rp.errors.push(

@@ -5,13 +5,12 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as express_fileupload from 'express-fileupload';
 import * as logger from 'morgan';
-import * as path from 'path';
 import * as statusMonitor from 'express-status-monitor';
 
 // Import config, the response template, and the utils (in this case the jwt manager).
 import { Response as Rp } from './config/response';
 import { statusMonitorConfiguration } from './config/statusMonitor_config';
-import { STATIC } from './config/const';
+import { STATIC, TMP, EXTERNALSTATIC } from './config/const';
 
 // Imports the routers.
 import fileRouter from './routes/fileRouter';
@@ -36,10 +35,10 @@ class App {
         debug: true,
         abortOnLimit: true,
         preserveExtension: true,
-        useTempFiles : true,
-        tempFileDir : path.join(__dirname, 'tmp')},
+        useTempFiles: true,
+        tempFileDir: TMP},
       )); // Manages the file uploads and adds a limit.
-    this.app.use('/api/v1/static', express.static(STATIC)); // Exposes a static folder to the exterior.
+    this.app.use(EXTERNALSTATIC, express.static(STATIC)); // Exposes a static folder to the exterior.
     this.app.use(statusMonitor(statusMonitorConfiguration));
 
     this.app.use((req, res, next) => {

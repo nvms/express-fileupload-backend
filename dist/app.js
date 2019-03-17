@@ -7,7 +7,6 @@ const cors = require("cors");
 const express = require("express");
 const express_fileupload = require("express-fileupload");
 const logger = require("morgan");
-const path = require("path");
 const statusMonitor = require("express-status-monitor");
 // Import config, the response template, and the utils (in this case the jwt manager).
 const response_1 = require("./config/response");
@@ -32,9 +31,9 @@ class App {
             abortOnLimit: true,
             preserveExtension: true,
             useTempFiles: true,
-            tempFileDir: path.join(__dirname, 'tmp')
+            tempFileDir: const_1.TMP
         })); // Manages the file uploads and adds a limit.
-        this.app.use('/api/v1/static', express.static(const_1.STATIC)); // Exposes a static folder to the exterior.
+        this.app.use(const_1.EXTERNALSTATIC, express.static(const_1.STATIC)); // Exposes a static folder to the exterior.
         this.app.use(statusMonitor(statusMonitor_config_1.statusMonitorConfiguration));
         this.app.use((req, res, next) => {
             response_1.Response.clearData();

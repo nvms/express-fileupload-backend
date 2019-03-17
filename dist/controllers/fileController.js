@@ -13,10 +13,10 @@ class FileController {
             fs.readdir(const_1.STATIC, (err, files) => {
                 if (!err) {
                     response_1.Response.data = [];
-                    files.forEach((file) => {
-                        console.log(`/api/v1/static/${file}`);
-                        response_1.Response.data.push(`/api/v1/static/${file}`);
-                    });
+                    for (const file of files) {
+                        console.log(const_1.EXTERNALSTATIC + file);
+                        response_1.Response.data.push(const_1.EXTERNALSTATIC + file);
+                    }
                     resolve(response_1.Response.export());
                 }
                 else {
@@ -45,11 +45,14 @@ class FileController {
                 return reject(response_1.Response);
             }
             const id = uuid();
-            fileManager_1.FileManager.manageFile(expressFile, const_1.STATIC, id + fileManager_1.FileManager.getExtension(expressFile))
+            const newname = id + fileManager_1.FileManager.getExtension(expressFile);
+            fileManager_1.FileManager.manageFile(expressFile, const_1.STATIC, newname)
                 .then(async (serverpath) => {
                 response_1.Response.data.path = serverpath;
-                response_1.Response.data.newname = id;
+                response_1.Response.data.newname = newname;
+                response_1.Response.data.idname = id;
                 response_1.Response.data.extension = fileManager_1.FileManager.getExtension(expressFile);
+                response_1.Response.data.size = fileManager_1.FileManager.getSize(expressFile);
                 response_1.Response.data.timestamp = moment();
                 resolve(response_1.Response.export());
                 /*  diskspace.check((os.platform() === 'win32') ? process.cwd().split(path.sep)[0] : '/', (err, result) => {
@@ -71,7 +74,7 @@ class FileController {
     async delFile(req) {
         console.log(req.params);
         return new Promise((resolve, reject) => {
-            fs.unlink(`${const_1.STATIC}/${req.params.music}`, (err) => {
+            fs.unlink(const_1.STATIC + req.params.music, (err) => {
                 if (err) {
                     console.log(err);
                     response_1.Response.errors.push(`Error deleting file ${req.params.music}, reason: ${err}`);
