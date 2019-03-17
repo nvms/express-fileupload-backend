@@ -15,4 +15,7 @@ COPY ./dist /usr/src/app/dist
 
 EXPOSE 3005
 
+ENV BYTERESTRICTOR = '10485760'
+
+
 CMD [ "npm", "run", "prod" ]
